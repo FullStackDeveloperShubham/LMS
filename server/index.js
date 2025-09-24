@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
+import hpp from "hpp";
 import mongoSanitizer from "mongoose-express-sanitizer";
 import morgan from "morgan";
 dotenv.config();
@@ -18,6 +19,7 @@ const limiter = rateLimit({
 
 // SECURITY  MIDDLEWARES
 app.use(helmet());
+app.use(hpp());
 app.use(mongoSanitizer());
 app.use("/api", limiter);
 
