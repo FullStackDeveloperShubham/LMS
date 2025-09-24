@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import rateLimit from "express-rate-limit";
+import helmet from "helmet";
 import morgan from "morgan";
 dotenv.config();
 
@@ -11,7 +12,13 @@ const PORT = process.env.PORT || 3000;
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  message: "Too many request from this IP , please try later ",
 });
+
+// SECURITY  MIDDLEWARES
+app.use(helmet());
+app.use("/api", limiter);
+
 // body parser middlware
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
