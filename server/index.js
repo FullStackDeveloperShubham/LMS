@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import express from "express";
 import rateLimit from "express-rate-limit";
@@ -26,6 +27,7 @@ app.use("/api", limiter);
 // body parser middlware
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
+app.use(cookieParser());
 
 // GLOBAL ERROR HANDLER
 app.use((err, req, res, next) => {
