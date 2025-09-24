@@ -2,10 +2,10 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
+import mongoSanitize from "express-mongo-sanitize";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import hpp from "hpp";
-import mongoSanitizer from "mongoose-express-sanitizer";
 import morgan from "morgan";
 dotenv.config();
 
@@ -22,7 +22,7 @@ const limiter = rateLimit({
 // SECURITY  MIDDLEWARES
 app.use(helmet());
 app.use(hpp());
-app.use(mongoSanitizer());
+app.use(mongoSanitize());
 app.use("/api", limiter);
 
 // body parser middlware
