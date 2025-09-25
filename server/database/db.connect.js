@@ -40,5 +40,8 @@ class DatabaseConnection {
     if (process.env.NODE_ENV) {
       mongoose.set("debug", true);
     }
+
+    await mongoose.connect(process.env.MONGO_URL, connectionOptions);
+    this.retryCount = 0;
   }
 }
