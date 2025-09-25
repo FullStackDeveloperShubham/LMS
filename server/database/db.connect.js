@@ -20,8 +20,10 @@ class DatabaseConnection {
     });
     mongoose.connection.on("disconnected", () => {
       console.log("MONGODB DISCONNECTED");
-      this.isConnected = false;
+      this.handleDisconnection();
     });
+
+    process.on("SIGTERM", this.handleAppTermination.bind(this));
   }
 
   async connect() {
@@ -68,7 +70,7 @@ class DatabaseConnection {
     }
   }
 
-  async handleDisconnect() {
+  async handleDisconnection() {
     if (!this.isConnected) {
       console.log("Attempting to reconnect to DB..");
       this.connect();
@@ -86,7 +88,7 @@ class DatabaseConnection {
     }
   }
 
-  getConnectionStatus() {
+  async getConnectionStatus() {
     return {
       isConnected: this.isConnected,
       readyState: mongoose.connection.readyState,
@@ -95,3 +97,10 @@ class DatabaseConnection {
     };
   }
 }
+
+// create a singleton instance
+const dbConnection = new DatabaseConnection();
+
+export default dbConnection.connect.bind(dbConnection);
+
+export const getDBStatus = dbConnection.getConnectionStatus.bind(dbConnection);
