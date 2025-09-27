@@ -100,6 +100,12 @@ userSchema.methods.getResetPasswordToken = function () {
   return resetToken;
 };
 
+// last active
+userSchema.methods.updateLastActive = function () {
+  this.lastActive = Date.now();
+  return this.lastActive({ validateBeforeSave: false });
+};
+
 // virtual fiels for total enrolled courses
 userSchema.virtual("totalEnrolledCourses").get(function () {
   return this.enrolledCourses.length();
