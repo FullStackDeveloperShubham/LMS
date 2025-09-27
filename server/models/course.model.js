@@ -78,3 +78,11 @@ const courseSchema = new Schema(
 courseSchema.virtual("averageRating").get(function () {
   return 0;
 });
+
+// calculate the total lecture
+courseSchema.pre("save", function (next) {
+  if (this.lecture) {
+    this.totalLecture = this.lecture.length;
+  }
+  next();
+});
