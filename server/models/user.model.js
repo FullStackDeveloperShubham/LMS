@@ -89,6 +89,7 @@ userSchema.methods.comparePassword = async function (enterdPassword) {
   return await bcrypt.compare(enterdPassword, this.password);
 };
 
+// get reset password token
 userSchema.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(20).toString("hex");
   this.resetPasswordToken = crypto
@@ -98,5 +99,10 @@ userSchema.methods.getResetPasswordToken = function () {
   this.resetPasswordExpiry = Date.now() + 10 * 60 * 1000;
   return resetToken;
 };
+
+// virtual fiels for total enrolled courses
+userSchema.virtual("totalEnrolledCourses").get(function () {
+  return this.enrolledCourses.length();
+});
 
 export const User = mongoose.model("User", userSchema);
