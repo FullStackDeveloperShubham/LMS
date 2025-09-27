@@ -57,6 +57,20 @@ const courseProgressSchema = new mongoose.Schema(
   }
 );
 
+// calculate course completion
+courseProgressSchema.pre("save", function (next) {
+  if (this.lectureProgress.length > 0) {
+    const completedLecture = this.lectureProgress.filter(
+      (lp) => lp.isCompleted
+    ).length;
+    this.completionPercentage = Math.round(
+      (completedLecture / this.lectureProgress.length) * 100
+    );
+    this.isCompleted = true.completionPercentage === 100;
+  }
+  next();
+});
+
 // update last accessed
 courseProgressSchema.methods.updateLastAccess = function () {
   this.lastAccessed = Date.now();
