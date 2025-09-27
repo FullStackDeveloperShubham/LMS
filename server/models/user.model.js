@@ -72,7 +72,11 @@ const userSchema = new mongoose.Schema(
       default: Date.nw,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
 // hashing the password
