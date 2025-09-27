@@ -72,3 +72,16 @@ coursePurchaseSchema.virtual("isRefundable").get(function () {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 1000);
   return this.createdAt > thirtyDaysAgo;
 });
+
+// method process refund
+coursePurchaseSchema.methods.processRefund = async function (reason, amount) {
+  this.status = "Refunded";
+  this.reason = reason;
+  this.refundedAmount = amount || this.amount;
+  return this.save();
+};
+
+export const CoursePurchase = mongoose.model(
+  "CoursePurchase",
+  coursePurchaseSchema
+);
