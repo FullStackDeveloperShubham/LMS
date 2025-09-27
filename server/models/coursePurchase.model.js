@@ -26,7 +26,7 @@ const coursePurchaseSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: {
-        values: ["Pending", "Compled", "Failed", "Refunded"],
+        values: ["Pending", "Completed", "Failed", "Refunded"],
         message: "Please select a valid status",
       },
       default: "Pending",
@@ -65,3 +65,10 @@ const coursePurchaseSchema = new mongoose.Schema(
 coursePurchaseSchema.index({ user: 1, course: 1 });
 coursePurchaseSchema.index({ status: 1 });
 coursePurchaseSchema.index({ createdAt: -1 });
+
+// virtuals
+coursePurchaseSchema.virtual("isRefundable").get(function () {
+  if (this.status !== "Completed") return false;
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 1000);
+  return this.createdAt > thirtyDaysAgo;
+});
