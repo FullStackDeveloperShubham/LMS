@@ -40,3 +40,13 @@ const lectureSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+// round the lecture duration
+lectureSchema.pre("save", function (next) {
+  if (this.duration) {
+    this.duration = Math.round(this.duration * 100) / 100;
+  }
+  next();
+});
+
+export const Lecture = mongoose.model("Lecture", lectureSchema);
